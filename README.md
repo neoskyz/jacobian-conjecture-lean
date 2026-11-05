@@ -4,6 +4,10 @@ A machine-checked Lean 4 formalization of L. Alpöge's 2026 counterexample to th
 It proves that the map below has constant Jacobian determinant `-2` and still has no polynomial
 inverse, over every field of characteristic zero.
 
+> [!IMPORTANT]
+> **MathDB shows "Lean verification did not pass" for this proof. The failure is in MathDB's own target file, not in this proof.**
+> MathDB's frozen target `Sun_Jacobian.lean` has no module docstring. MathDB's own linter (`linter.style.moduleDocstring`, from `MathDBUtil`) warns on that file, and the verifier treats the warning as an error. Compiling the target alone, with no submission, reproduces the exact message, so every submission against this target fails the same way. This proof's own files compile with zero warnings under warnings-as-errors. Reported with steps to reproduce: [mathdb-lean/problems#9](https://github.com/mathdb-lean/problems/issues/9).
+
 ```
 F₁ = (1 + z₁z₂)³ z₃ + z₂² (1 + z₁z₂)(4 + 3z₁z₂)
 F₂ = z₂ + 3z₁ (1 + z₁z₂)² z₃ + 3z₁z₂² (4 + 3z₁z₂)
@@ -45,7 +49,7 @@ The script compiles everything with warnings treated as errors and prints the ax
 
 No `sorry`, `admit`, `native_decide` or added axioms.
 
-**MathDB.** [`Submission.lean`](Submission.lean) is the entry point for MathDB problem #315779 (JSP-000037). It proves `¬ Problem.Target`, because MathDB's frozen target `Sun_Jacobian.lean` states the conjecture in every dimension. MathDB supplies that target file, so it is not in this repository.
+**MathDB.** [`Submission.lean`](Submission.lean) is the entry point for MathDB problem #315779 (JSP-000037). It proves `¬ Problem.Target`, because MathDB's frozen target `Sun_Jacobian.lean` states the conjecture in every dimension. MathDB supplies that target file, so it is not in this repository. Its verification status is explained in the note at the top of this page.
 
 ## Credit
 
