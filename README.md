@@ -1,31 +1,8 @@
-# The JSP-000037 Lean target is false
+# The Jacobian conjecture fails in dimension 3: a Lean 4 proof
 
-A machine-checked proof of `¬ Problem.Target` for the Lean statement attached to
-MathDB problem #315779 (Justin Sun Prize JSP-000037, Jacobian conjecture):
-`Sun_Jacobian.lean`, sha256 `97f1d4ffe39182db16ed33cfb6f1df24c43e2a9a25c544ed6b131ca71f9a6a7a`.
-
-## Statement correspondence
-
-The frozen target is MathDB's
-[`Sun_Jacobian.lean`](https://github.com/mathdb-lean/problems/blob/924bd70ab97fcf6f1eda41dac7ee1be7e0bc8bda/additional-statements/315779/Sun_Jacobian.lean)
-(module `FtpEvalBench.Sun_Jacobian`, sha256 `97f1d4ffe39182db16ed33cfb6f1df24c43e2a9a25c544ed6b131ca71f9a6a7a`).
-It states that over every field of characteristic zero, in every dimension `n ≥ 1`, a polynomial
-map with constant nonzero Jacobian determinant has a two-sided polynomial inverse. MathDB supplies
-this module to its checker, so it is not part of this repository.
-
-- `JacobianDisproof.lean` defines `KellerAllDims`, verbatim the body of `Problem.Target`, and proves
-  `JacobianDisproof.not_kellerAllDims : ¬ KellerAllDims.{u}` for every universe `u` (the field is
-  `ULift.{u} ℚ`). It imports only Mathlib.
-- `Submission.lean` (root, the MathDB entry point) imports the unchanged target and exports
-
-```lean
-theorem Submission.solution : ¬ Problem.Target.{u}
-```
-
-Because the target is false, the entry point has type `¬ Problem.Target`, not `Problem.Target`.
-It refutes the general-dimension statement; it does not settle the plane case `n = 2`.
-
-The witness is the map `F : K³ → K³` announced by L. Alpöge on July 19, 2026:
+A machine-checked Lean 4 formalization of L. Alpöge's 2026 counterexample to the Jacobian conjecture.
+It proves that the map below has constant Jacobian determinant `-2` and still has no polynomial
+inverse, over every field of characteristic zero.
 
 ```
 F₁ = (1 + z₁z₂)³ z₃ + z₂² (1 + z₁z₂)(4 + 3z₁z₂)
@@ -33,37 +10,47 @@ F₂ = z₂ + 3z₁ (1 + z₁z₂)² z₃ + 3z₁z₂² (4 + 3z₁z₂)
 F₃ = 2z₁ − 3z₁²z₂ − z₁³z₃
 ```
 
-- `jacobian_det`: its Jacobian determinant is the constant `-2` (over any field);
-- `eval_p₁`, `eval_p₂`, `eval_p₃`: `F(0, 0, -1/4) = F(1, -3/2, 13/2) = F(-1, 3/2, 13/2) = (-1/4, 0, 0)`;
-- `no_leftInverse`: so no polynomial `G` satisfies `G ∘ F = id` (the target's second conjunct).
+## What is proved
+
+All of the mathematics is in [`JacobianDisproof.lean`](JacobianDisproof.lean), which imports only Mathlib.
+
+| Lean name | Statement |
+|---|---|
+| `jacobian_det` | `det (∂Fᵢ/∂zⱼ) = C (-2)`, over any field |
+| `eval_p₁`, `eval_p₂`, `eval_p₃` | `F(0, 0, -1/4) = F(1, -3/2, 13/2) = F(-1, 3/2, 13/2) = (-1/4, 0, 0)` |
+| `no_leftInverse` | no polynomial `G` satisfies `G ∘ F = id`, since `F` is not injective |
+| `not_kellerAllDims` | Keller's statement for all dimensions `n ≥ 1` is false, in every universe |
+
+How the proof goes:
+- **Determinant:** the nine partial derivatives are computed by `simp`, then the 3×3 determinant is expanded and simplified with `ring`.
+- **Three points, one image:** the three points are evaluated by `norm_num`.
+- **No inverse:** a polynomial left inverse `G` would give `G(F(p)) = p` at every point `p`. That is impossible when two different points have the same image.
+
+The statement only concerns dimension 3 and up. The plane case `n = 2` is still open, and this repository does not touch it.
 
 ## Build and check
 
-Lean `v4.33.1` and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474` (MathDB's frozen environment for
-this target), through `mathdb-lean/problems` at `aa532247d0301aca9a1c62f119920622f465878b`, which provides
-`MathDBUtil` (imported by the target).
+Requirements: Lean `v4.33.1` and Mathlib `0df444a360eaa60ab8c11dca51a86af692955474`.
 
 ```sh
 lake exe cache get
 scripts/check_submission.sh
 ```
 
-The script fetches the frozen target, checks its sha256, compiles it, then compiles
-`JacobianDisproof.lean` and `Submission.lean` with warnings as errors and the full Mathlib linter set,
-and prints the axioms:
+The script compiles everything with warnings treated as errors and prints the axioms the proof uses:
 
 ```
 'Submission.solution' depends on axioms: [propext, Classical.choice, Quot.sound]
 ```
 
-No `sorry`, `admit`, `native_decide`, added axioms or `set_option`.
+No `sorry`, `admit`, `native_decide` or added axioms.
+
+**MathDB.** [`Submission.lean`](Submission.lean) is the entry point for MathDB problem #315779 (JSP-000037). It proves `¬ Problem.Target`, because MathDB's frozen target `Sun_Jacobian.lean` states the conjecture in every dimension. MathDB supplies that target file, so it is not in this repository.
 
 ## Credit
 
 The counterexample is due to Levent Alpöge
-([announced July 19, 2026](https://x.com/__alpoge__/status/2079028340955197566); see also the sources
-listed on [MathDB #315779](https://mathdb.com/p/315779)). This repository is an independent Lean
-formalization of the fact that it refutes the target statement, by Zinan Xing, prepared with the
-assistance of AI.
+([announced July 19, 2026](https://x.com/__alpoge__/status/2079028340955197566)). This repository is an
+independent Lean formalization by Zinan Xing, prepared with the assistance of AI.
 
 License: [Apache-2.0](LICENSE).
