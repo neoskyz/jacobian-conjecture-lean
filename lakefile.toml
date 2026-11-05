@@ -1,15 +1,15 @@
 # Independent Lean formalization: the JSP-000037 / MathDB #315779 target is false.
-# Environment pinned to MathDB's recorded environment for this target:
-# Lean v4.33.1, mathlib 0df444a360eaa60ab8c11dca51a86af692955474, via the
-# mathdb-lean/problems project at aa532247 (the last commit pinned to that environment).
+# Lean v4.33.1 and Mathlib 0df444a360eaa60ab8c11dca51a86af692955474 (MathDB's frozen environment
+# for this target), via mathdb-lean/problems at aa532247 (provides MathDBUtil, used by the target).
+# The frozen target module FtpEvalBench.Sun_Jacobian is supplied by MathDB; it is not in this repo.
+# Root `Submission.lean` is the MathDB entry point; check it locally with scripts/check_submission.sh.
 name = "jacobian_disproof"
-defaultTargets = ["FtpEvalBench", "JacobianDisproof", "Submission"]
+defaultTargets = ["JacobianDisproof"]
 
 [leanOptions]
 pp.unicode.fun = true
 autoImplicit = false
 relaxedAutoImplicit = false
-weak.linter.style.moduleDocstring = false
 
 [[require]]
 name = "mathdb_lean"
@@ -17,11 +17,4 @@ git = "https://github.com/mathdb-lean/problems"
 rev = "aa532247d0301aca9a1c62f119920622f465878b"
 
 [[lean_lib]]
-name = "FtpEvalBench"
-globs = ["FtpEvalBench.Sun_Jacobian"]
-
-[[lean_lib]]
 name = "JacobianDisproof"
-
-[[lean_lib]]
-name = "Submission"

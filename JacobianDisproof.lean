@@ -1,11 +1,11 @@
-import FtpEvalBench.Sun_Jacobian
+import Mathlib
 
 /-!
 # The JSP-000037 target (MathDB #315779, `Sun_Jacobian.lean`) is false
 
 `Problem.Target` states that, over every field of characteristic zero and in every positive
 dimension, a polynomial self-map with constant nonzero Jacobian determinant has a two-sided
-polynomial inverse. We prove `¬ Problem.Target`, in every universe, using the explicit
+polynomial inverse. We prove its negation `¬ KellerAllDims`, in every universe, using the explicit
 three-dimensional counterexample announced by L. Alpöge in July 2026:
 
   F₁ = (1 + z₁z₂)³ z₃ + z₂² (1 + z₁z₂)(4 + 3z₁z₂)
@@ -144,8 +144,17 @@ end Fiber
 instance charZero_ULift_rat : CharZero (ULift.{u} ℚ) :=
   RingHom.charZero (ULift.ringEquiv : ULift.{u} ℚ ≃+* ℚ).toRingHom
 
-/-- **The JSP-000037 target is false**, in every universe `u`. -/
-theorem not_target : ¬ Problem.Target.{u} := by
+/-- Keller's statement in every positive dimension: verbatim the body of MathDB's frozen
+`Problem.Target` (`FtpEvalBench.Sun_Jacobian`, MathDB #315779). -/
+abbrev KellerAllDims : Prop := ∀ (K : Type u) [Field K] [CharZero K] (n : ℕ), 1 ≤ n →
+  ∀ F : Fin n → MvPolynomial (Fin n) K,
+    (∃ c : K, c ≠ 0 ∧ Matrix.det (fun i j => MvPolynomial.pderiv j (F i)) = MvPolynomial.C c) →
+    ∃ G : Fin n → MvPolynomial (Fin n) K,
+      (∀ i, MvPolynomial.bind₁ G (F i) = MvPolynomial.X i) ∧
+      (∀ i, MvPolynomial.bind₁ F (G i) = MvPolynomial.X i)
+
+/-- The statement is false, in every universe. -/
+theorem not_kellerAllDims : ¬ KellerAllDims.{u} := by
   intro h
   obtain ⟨G, -, hGF⟩ :=
     h (ULift.{u} ℚ) 3 (by norm_num) F ⟨-2, by norm_num, jacobian_det⟩
