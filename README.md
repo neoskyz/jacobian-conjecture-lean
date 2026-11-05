@@ -49,7 +49,7 @@ The script compiles everything with warnings treated as errors and prints the ax
 
 No `sorry`, `admit`, `native_decide` or added axioms.
 
-**MathDB.** [`Submission.lean`](Submission.lean) is the entry point for MathDB problem #315779 (JSP-000037). It proves `¬ Problem.Target`, because MathDB's frozen target `Sun_Jacobian.lean` states the conjecture in every dimension. MathDB supplies that target file, so it is not in this repository. Its verification status is explained in the note at the top of this page.
+**MathDB.** [`Submission.lean`](Submission.lean) is the entry point for MathDB problem #315779. It proves `¬ Problem.Target`, because MathDB's frozen target `Sun_Jacobian.lean` states the conjecture in every dimension. MathDB supplies that target file, so it is not in this repository. Its verification status is explained in the note at the top of this page.
 
 ## Credit
 
