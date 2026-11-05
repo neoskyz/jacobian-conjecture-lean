@@ -10,7 +10,7 @@ F=.frozen/src/FtpEvalBench/Sun_Jacobian.lean
 mkdir -p .frozen/src/FtpEvalBench .frozen/build/FtpEvalBench
 curl -fsSL "$URL" -o "$F"
 echo "$SHA  $F" | shasum -a 256 -c -
-lake build
+lake build MathDBUtil JacobianDisproof
 LP="$(lake env printenv LEAN_PATH):$PWD/.frozen/build"
 STRICT=(-DwarningAsError=true -Dweak.linter.mathlibStandardSet=true)
 LEAN_PATH=$LP lean -o .frozen/build/FtpEvalBench/Sun_Jacobian.olean "$F"
