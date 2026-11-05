@@ -43,12 +43,14 @@ noncomputable def F : Fin 3 → MvPolynomial (Fin 3) K :=
 /- The nine entries of the Jacobian matrix `(∂Fᵢ/∂zⱼ)`. -/
 
 lemma d00 : pderiv 0 (F (K := K) 0) =
-    3 * X 0 ^ 2 * X 1 ^ 3 * X 2 + 6 * X 0 * X 1 ^ 4 + 6 * X 0 * X 1 ^ 2 * X 2 + 7 * X 1 ^ 3 + 3 * X 1 * X 2 := by
+    3 * X 0 ^ 2 * X 1 ^ 3 * X 2 + 6 * X 0 * X 1 ^ 4 + 6 * X 0 * X 1 ^ 2 * X 2 + 7 * X 1 ^ 3 +
+      3 * X 1 * X 2 := by
   simp [F, pderiv_X, Derivation.leibniz, Derivation.leibniz_pow, smul_eq_mul, nsmul_eq_mul]
   ring
 
 lemma d01 : pderiv 1 (F (K := K) 0) =
-    3 * X 0 ^ 3 * X 1 ^ 2 * X 2 + 12 * X 0 ^ 2 * X 1 ^ 3 + 6 * X 0 ^ 2 * X 1 * X 2 + 21 * X 0 * X 1 ^ 2 + 3 * X 0 * X 2 + 8 * X 1 := by
+    3 * X 0 ^ 3 * X 1 ^ 2 * X 2 + 12 * X 0 ^ 2 * X 1 ^ 3 + 6 * X 0 ^ 2 * X 1 * X 2 +
+      21 * X 0 * X 1 ^ 2 + 3 * X 0 * X 2 + 8 * X 1 := by
   simp [F, pderiv_X, Derivation.leibniz, Derivation.leibniz_pow, smul_eq_mul, nsmul_eq_mul]
   ring
 
@@ -58,7 +60,8 @@ lemma d02 : pderiv 2 (F (K := K) 0) =
   ring
 
 lemma d10 : pderiv 0 (F (K := K) 1) =
-    9 * X 0 ^ 2 * X 1 ^ 2 * X 2 + 18 * X 0 * X 1 ^ 3 + 12 * X 0 * X 1 * X 2 + 12 * X 1 ^ 2 + 3 * X 2 := by
+    9 * X 0 ^ 2 * X 1 ^ 2 * X 2 + 18 * X 0 * X 1 ^ 3 + 12 * X 0 * X 1 * X 2 + 12 * X 1 ^ 2 +
+      3 * X 2 := by
   simp [F, pderiv_X, Derivation.leibniz, Derivation.leibniz_pow, smul_eq_mul, nsmul_eq_mul]
   ring
 

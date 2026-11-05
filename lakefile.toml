@@ -9,6 +9,7 @@ defaultTargets = ["FtpEvalBench", "JacobianDisproof", "Submission"]
 pp.unicode.fun = true
 autoImplicit = false
 relaxedAutoImplicit = false
+weak.linter.style.moduleDocstring = false
 
 [[require]]
 name = "mathdb_lean"
